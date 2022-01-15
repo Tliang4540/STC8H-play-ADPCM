@@ -1,0 +1,5 @@
+使用STC8H1K08播放ADPCM音频数据
+
+adpcm1文件中是python脚本，用来读取ima-adpcm文件数据
+
+使用SDCC编译器编译

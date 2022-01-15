@@ -1,0 +1,15 @@
+{
+	"folders": [
+		{
+			"path": "."
+		}
+	],
+	"settings": {
+		"files.encoding": "gb2312",
+		"files.associations": {
+			"iap_eeprom.h": "c",
+			"pre_def.h": "c",
+			"uart.h": "c"
+		}
+	}
+}

@@ -1,0 +1,26 @@
+{
+    "configurations": [
+        {
+            "name": "Win32",
+            "includePath": [
+                "${workspaceFolder}/**"
+            ],
+            "defines": [
+                "__bit = _Bool",
+                "__xdata = ",
+                "__code = ",
+                "__using(x) = ",
+                "__interrupt(x) = ",
+                "__sfr = unsigned char",
+                "__sbit = unsigned char",
+                "__at(x) = ",
+                "PI = 3.14"
+            ],
+            "compilerPath": "D:\\mingw64\\bin\\gcc.exe",
+            "cStandard": "gnu17",
+            "cppStandard": "gnu++14",
+            "intelliSenseMode": "windows-gcc-x64"
+        }
+    ],
+    "version": 4
+}
