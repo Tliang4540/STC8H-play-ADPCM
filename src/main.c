@@ -12,8 +12,8 @@ void MiniSch_Init(void)
   AUXR = 0x00;	
   SCON = 0x50;	
   TL1 = 0xFC;		//115200
-	TH1 = 0xFF;
-	TR1 = 1;
+  TH1 = 0xFF;
+  TR1 = 1;
 
   TMOD = 0x00;	//time0 sch, time1 uart
   IE   = 0x92;  	//ea = 1, et0 = 1
@@ -24,8 +24,8 @@ void MiniSch_Init(void)
 
 void CPU_Init(void)
 {
-	WDT_CONTR = 0x26;	//wdt 2s.
-	WDT_CONTR = 0x36;	//clear wdt.
+  WDT_CONTR = 0x26;	//wdt 2s.
+  WDT_CONTR = 0x36;	//clear wdt.
 
   P1   = 0x00;
   P1M0 = 0xff;
@@ -42,7 +42,6 @@ void CPU_Init(void)
 
 uint8_t task1(void)
 {
-  static uint8_t key_time = 128;
   _SS
   pwm_init();
   while(MINI_SCH_RUN)
