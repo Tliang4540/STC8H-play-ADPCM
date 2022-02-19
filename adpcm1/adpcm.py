@@ -39,7 +39,14 @@ def main():
     fact_st = fact
     data_st = data
     block_st = block
-    wavfile = open("1.wav", "rb")
+    try:
+        wavfile = open("1.wav", "rb")
+    except:
+        try:
+            wavfile = open("adpcm1/1.wav", "rb")
+        except:
+            print('not "1.wav" file')
+            exit()
     
     wav_st.chunkID = wavfile.read(4).decode()
     wav_st.chunkSize = int.from_bytes(wavfile.read(4), "little", signed=False)
@@ -51,7 +58,7 @@ def main():
     fmt_st.numChannels = int.from_bytes(wavfile.read(2), "little", signed=False)
     fmt_st.sampleRate = int.from_bytes(wavfile.read(4), "little", signed=False)
     fmt_st.byteRate = int.from_bytes(wavfile.read(4), "little", signed=False)
-    fmt_st.blockAlign = int.from_bytes(wavfile.read(2), "little", signed=False)
+    fmt_st.blockAlign = int.from_bytes(wavfile.read(2), "little", signed=False)     #块大小
     fmt_st.bitsSample = int.from_bytes(wavfile.read(2), "little", signed=False)
     fmt_st.byteData = int.from_bytes(wavfile.read(2), "little", signed=False)
     fmt_st.sampleBlock = int.from_bytes(wavfile.read(2), "little", signed=False)
@@ -64,17 +71,21 @@ def main():
         data_st.chunkSize = int.from_bytes(wavfile.read(4), "little", signed=False)
     elif fact_st.chunkID == "data" :
         data_st.chunkID = fact_st.chunkID
-        data_st.chunkSize = int.from_bytes(wavfile.read(4), "little", signed=False)
+        data_st.chunkSize = int.from_bytes(wavfile.read(4), "little", signed=False)     #全部音频块数据的字节数量,除去WAV头的所有数据
 
     if fmt_st.audioFormat == 17 :
-        i = 0
-        while(i < 15):
+        i = data_st.chunkSize    
+        while(i > 0):
             #block_st.presample = int.from_bytes(wavfile.read(2), "little", signed=True)
             #block_st.index = int.from_bytes(wavfile.read(1), "little", signed=False)
             print(str(int.from_bytes(wavfile.read(1), "little", signed=False))+', '+str(int.from_bytes(wavfile.read(1), "little", signed=False))+', '+str(int.from_bytes(wavfile.read(1), "little", signed=False))+', ')
             block_st.rsv = int.from_bytes(wavfile.read(1), "little", signed=False)
-            block_st.bdata = wavfile.read(fmt_st.blockAlign-4)
-            i+=1
+            if i < fmt_st.blockAlign :  #如果不够一块数据
+                block_st.bdata = wavfile.read(i)    #读取全部数据
+                i = 0 
+            else :
+                block_st.bdata = wavfile.read(fmt_st.blockAlign-4)  #超过一块数据则读取一块数据
+                i-=fmt_st.blockAlign
             s = ''
             j = 0
             for k in block_st.bdata:

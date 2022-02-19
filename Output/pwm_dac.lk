@@ -1,0 +1,20 @@
+-muwx
+-i ./Output/pwm_dac.ihx
+-M
+-b HOME = 0x0000
+-b XSEG = 0x0001
+-b PSEG = 0x0001
+-b ISEG = 0x0000
+-b BSEG = 0x0000
+-k D:\sdcc\bin\..\lib\small
+-l mcs51
+-l libsdcc
+-l libint
+-l liblong
+-l libfloat
+./Output/pwm_dac.rel
+./Output/main.rel
+./Output/interrupt_handled.rel
+./Output/uart.rel
+
+-e
