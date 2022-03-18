@@ -472,7 +472,7 @@
                                     472 ;	-----------------------------------------
                                     473 ;	 function INT0_Interrupt
                                     474 ;	-----------------------------------------
-      0005C0                        475 _INT0_Interrupt:
+      000635                        475 _INT0_Interrupt:
                            000007   476 	ar7 = 0x07
                            000006   477 	ar6 = 0x06
                            000005   478 	ar5 = 0x05
@@ -482,9 +482,9 @@
                            000001   482 	ar1 = 0x01
                            000000   483 	ar0 = 0x00
                                     484 ;	src/interrupt_handled.c:6: IAP_CONTR |= 0x60;
-      0005C0 43 C7 60         [24]  485 	orl	_IAP_CONTR,#0x60
+      000635 43 C7 60         [24]  485 	orl	_IAP_CONTR,#0x60
                                     486 ;	src/interrupt_handled.c:7: }
-      0005C3 32               [24]  487 	reti
+      000638 32               [24]  487 	reti
                                     488 ;	eliminated unneeded mov psw,# (no regs used in bank)
                                     489 ;	eliminated unneeded push/pop not_psw
                                     490 ;	eliminated unneeded push/pop dpl
@@ -500,7 +500,7 @@
                                     500 ;	-----------------------------------------
                                     501 ;	 function TIME0_Interrupt
                                     502 ;	-----------------------------------------
-      0005C4                        503 _TIME0_Interrupt:
+      000639                        503 _TIME0_Interrupt:
                            00000F   504 	ar7 = 0x0f
                            00000E   505 	ar6 = 0x0e
                            00000D   506 	ar5 = 0x0d
@@ -509,41 +509,41 @@
                            00000A   509 	ar2 = 0x0a
                            000009   510 	ar1 = 0x09
                            000008   511 	ar0 = 0x08
-      0005C4 C0 E0            [24]  512 	push	acc
-      0005C6 C0 D0            [24]  513 	push	psw
-      0005C8 75 D0 08         [24]  514 	mov	psw,#0x08
+      000639 C0 E0            [24]  512 	push	acc
+      00063B C0 D0            [24]  513 	push	psw
+      00063D 75 D0 08         [24]  514 	mov	psw,#0x08
                                     515 ;	src/interrupt_handled.c:11: UpdateTimers();
-      0005CB 7F 05            [12]  516 	mov	r7,#0x05
-      0005CD                        517 00108$:
-      0005CD 8F 0E            [24]  518 	mov	ar6,r7
-      0005CF EE               [12]  519 	mov	a,r6
-      0005D0 14               [12]  520 	dec	a
-      0005D1 24 21            [12]  521 	add	a,#_timers
-      0005D3 F9               [12]  522 	mov	r1,a
-      0005D4 E7               [12]  523 	mov	a,@r1
-      0005D5 60 15            [24]  524 	jz	00109$
-      0005D7 EE               [12]  525 	mov	a,r6
-      0005D8 14               [12]  526 	dec	a
-      0005D9 24 21            [12]  527 	add	a,#_timers
-      0005DB F9               [12]  528 	mov	r1,a
-      0005DC 87 0D            [24]  529 	mov	ar5,@r1
-      0005DE BD FF 02         [24]  530 	cjne	r5,#0xff,00129$
-      0005E1 80 09            [24]  531 	sjmp	00109$
-      0005E3                        532 00129$:
-      0005E3 EE               [12]  533 	mov	a,r6
-      0005E4 14               [12]  534 	dec	a
-      0005E5 24 21            [12]  535 	add	a,#_timers
-      0005E7 F9               [12]  536 	mov	r1,a
-      0005E8 E7               [12]  537 	mov	a,@r1
-      0005E9 FE               [12]  538 	mov	r6,a
-      0005EA 14               [12]  539 	dec	a
-      0005EB F7               [12]  540 	mov	@r1,a
-      0005EC                        541 00109$:
-      0005EC DF DF            [24]  542 	djnz	r7,00108$
+      000640 7F 05            [12]  516 	mov	r7,#0x05
+      000642                        517 00108$:
+      000642 8F 0E            [24]  518 	mov	ar6,r7
+      000644 EE               [12]  519 	mov	a,r6
+      000645 14               [12]  520 	dec	a
+      000646 24 21            [12]  521 	add	a,#_timers
+      000648 F9               [12]  522 	mov	r1,a
+      000649 E7               [12]  523 	mov	a,@r1
+      00064A 60 15            [24]  524 	jz	00109$
+      00064C EE               [12]  525 	mov	a,r6
+      00064D 14               [12]  526 	dec	a
+      00064E 24 21            [12]  527 	add	a,#_timers
+      000650 F9               [12]  528 	mov	r1,a
+      000651 87 0D            [24]  529 	mov	ar5,@r1
+      000653 BD FF 02         [24]  530 	cjne	r5,#0xff,00129$
+      000656 80 09            [24]  531 	sjmp	00109$
+      000658                        532 00129$:
+      000658 EE               [12]  533 	mov	a,r6
+      000659 14               [12]  534 	dec	a
+      00065A 24 21            [12]  535 	add	a,#_timers
+      00065C F9               [12]  536 	mov	r1,a
+      00065D E7               [12]  537 	mov	a,@r1
+      00065E FE               [12]  538 	mov	r6,a
+      00065F 14               [12]  539 	dec	a
+      000660 F7               [12]  540 	mov	@r1,a
+      000661                        541 00109$:
+      000661 DF DF            [24]  542 	djnz	r7,00108$
                                     543 ;	src/interrupt_handled.c:12: }
-      0005EE D0 D0            [24]  544 	pop	psw
-      0005F0 D0 E0            [24]  545 	pop	acc
-      0005F2 32               [24]  546 	reti
+      000663 D0 D0            [24]  544 	pop	psw
+      000665 D0 E0            [24]  545 	pop	acc
+      000667 32               [24]  546 	reti
                                     547 ;	eliminated unneeded push/pop dpl
                                     548 ;	eliminated unneeded push/pop dph
                                     549 ;	eliminated unneeded push/pop b
@@ -554,7 +554,7 @@
                                     554 ;	-----------------------------------------
                                     555 ;	 function INT1_Interrupt
                                     556 ;	-----------------------------------------
-      0005F3                        557 _INT1_Interrupt:
+      000668                        557 _INT1_Interrupt:
                            000007   558 	ar7 = 0x07
                            000006   559 	ar6 = 0x06
                            000005   560 	ar5 = 0x05
@@ -564,9 +564,9 @@
                            000001   564 	ar1 = 0x01
                            000000   565 	ar0 = 0x00
                                     566 ;	src/interrupt_handled.c:16: IAP_CONTR |= 0x60;
-      0005F3 43 C7 60         [24]  567 	orl	_IAP_CONTR,#0x60
+      000668 43 C7 60         [24]  567 	orl	_IAP_CONTR,#0x60
                                     568 ;	src/interrupt_handled.c:17: }
-      0005F6 32               [24]  569 	reti
+      00066B 32               [24]  569 	reti
                                     570 ;	eliminated unneeded mov psw,# (no regs used in bank)
                                     571 ;	eliminated unneeded push/pop not_psw
                                     572 ;	eliminated unneeded push/pop dpl
@@ -580,11 +580,11 @@
                                     580 ;	-----------------------------------------
                                     581 ;	 function TIME1_Interrupt
                                     582 ;	-----------------------------------------
-      0005F7                        583 _TIME1_Interrupt:
+      00066C                        583 _TIME1_Interrupt:
                                     584 ;	src/interrupt_handled.c:21: IAP_CONTR |= 0x60;
-      0005F7 43 C7 60         [24]  585 	orl	_IAP_CONTR,#0x60
+      00066C 43 C7 60         [24]  585 	orl	_IAP_CONTR,#0x60
                                     586 ;	src/interrupt_handled.c:22: }
-      0005FA 32               [24]  587 	reti
+      00066F 32               [24]  587 	reti
                                     588 ;	eliminated unneeded mov psw,# (no regs used in bank)
                                     589 ;	eliminated unneeded push/pop not_psw
                                     590 ;	eliminated unneeded push/pop dpl
@@ -598,11 +598,11 @@
                                     598 ;	-----------------------------------------
                                     599 ;	 function ADC_Interrupt
                                     600 ;	-----------------------------------------
-      0005FB                        601 _ADC_Interrupt:
+      000670                        601 _ADC_Interrupt:
                                     602 ;	src/interrupt_handled.c:31: IAP_CONTR |= 0x60;
-      0005FB 43 C7 60         [24]  603 	orl	_IAP_CONTR,#0x60
+      000670 43 C7 60         [24]  603 	orl	_IAP_CONTR,#0x60
                                     604 ;	src/interrupt_handled.c:32: }
-      0005FE 32               [24]  605 	reti
+      000673 32               [24]  605 	reti
                                     606 ;	eliminated unneeded mov psw,# (no regs used in bank)
                                     607 ;	eliminated unneeded push/pop not_psw
                                     608 ;	eliminated unneeded push/pop dpl
@@ -616,11 +616,11 @@
                                     616 ;	-----------------------------------------
                                     617 ;	 function LVD_Interrupt
                                     618 ;	-----------------------------------------
-      0005FF                        619 _LVD_Interrupt:
+      000674                        619 _LVD_Interrupt:
                                     620 ;	src/interrupt_handled.c:36: IAP_CONTR |= 0x60;
-      0005FF 43 C7 60         [24]  621 	orl	_IAP_CONTR,#0x60
+      000674 43 C7 60         [24]  621 	orl	_IAP_CONTR,#0x60
                                     622 ;	src/interrupt_handled.c:37: }
-      000602 32               [24]  623 	reti
+      000677 32               [24]  623 	reti
                                     624 ;	eliminated unneeded mov psw,# (no regs used in bank)
                                     625 ;	eliminated unneeded push/pop not_psw
                                     626 ;	eliminated unneeded push/pop dpl
@@ -634,11 +634,11 @@
                                     634 ;	-----------------------------------------
                                     635 ;	 function PCA_Interrupt
                                     636 ;	-----------------------------------------
-      000603                        637 _PCA_Interrupt:
+      000678                        637 _PCA_Interrupt:
                                     638 ;	src/interrupt_handled.c:41: IAP_CONTR |= 0x60;
-      000603 43 C7 60         [24]  639 	orl	_IAP_CONTR,#0x60
+      000678 43 C7 60         [24]  639 	orl	_IAP_CONTR,#0x60
                                     640 ;	src/interrupt_handled.c:42: }
-      000606 32               [24]  641 	reti
+      00067B 32               [24]  641 	reti
                                     642 ;	eliminated unneeded mov psw,# (no regs used in bank)
                                     643 ;	eliminated unneeded push/pop not_psw
                                     644 ;	eliminated unneeded push/pop dpl
@@ -652,11 +652,11 @@
                                     652 ;	-----------------------------------------
                                     653 ;	 function UART2_Interrupt
                                     654 ;	-----------------------------------------
-      000607                        655 _UART2_Interrupt:
+      00067C                        655 _UART2_Interrupt:
                                     656 ;	src/interrupt_handled.c:46: IAP_CONTR |= 0x60;
-      000607 43 C7 60         [24]  657 	orl	_IAP_CONTR,#0x60
+      00067C 43 C7 60         [24]  657 	orl	_IAP_CONTR,#0x60
                                     658 ;	src/interrupt_handled.c:47: }
-      00060A 32               [24]  659 	reti
+      00067F 32               [24]  659 	reti
                                     660 ;	eliminated unneeded mov psw,# (no regs used in bank)
                                     661 ;	eliminated unneeded push/pop not_psw
                                     662 ;	eliminated unneeded push/pop dpl
@@ -670,11 +670,11 @@
                                     670 ;	-----------------------------------------
                                     671 ;	 function SPI_Interrupt
                                     672 ;	-----------------------------------------
-      00060B                        673 _SPI_Interrupt:
+      000680                        673 _SPI_Interrupt:
                                     674 ;	src/interrupt_handled.c:51: IAP_CONTR |= 0x60;
-      00060B 43 C7 60         [24]  675 	orl	_IAP_CONTR,#0x60
+      000680 43 C7 60         [24]  675 	orl	_IAP_CONTR,#0x60
                                     676 ;	src/interrupt_handled.c:52: }
-      00060E 32               [24]  677 	reti
+      000683 32               [24]  677 	reti
                                     678 ;	eliminated unneeded mov psw,# (no regs used in bank)
                                     679 ;	eliminated unneeded push/pop not_psw
                                     680 ;	eliminated unneeded push/pop dpl
@@ -688,11 +688,11 @@
                                     688 ;	-----------------------------------------
                                     689 ;	 function INT2_Interrupt
                                     690 ;	-----------------------------------------
-      00060F                        691 _INT2_Interrupt:
+      000684                        691 _INT2_Interrupt:
                                     692 ;	src/interrupt_handled.c:56: IAP_CONTR |= 0x60;
-      00060F 43 C7 60         [24]  693 	orl	_IAP_CONTR,#0x60
+      000684 43 C7 60         [24]  693 	orl	_IAP_CONTR,#0x60
                                     694 ;	src/interrupt_handled.c:57: }
-      000612 32               [24]  695 	reti
+      000687 32               [24]  695 	reti
                                     696 ;	eliminated unneeded mov psw,# (no regs used in bank)
                                     697 ;	eliminated unneeded push/pop not_psw
                                     698 ;	eliminated unneeded push/pop dpl
@@ -706,11 +706,11 @@
                                     706 ;	-----------------------------------------
                                     707 ;	 function INT3_Interrupt
                                     708 ;	-----------------------------------------
-      000613                        709 _INT3_Interrupt:
+      000688                        709 _INT3_Interrupt:
                                     710 ;	src/interrupt_handled.c:61: IAP_CONTR |= 0x60;
-      000613 43 C7 60         [24]  711 	orl	_IAP_CONTR,#0x60
+      000688 43 C7 60         [24]  711 	orl	_IAP_CONTR,#0x60
                                     712 ;	src/interrupt_handled.c:62: }
-      000616 32               [24]  713 	reti
+      00068B 32               [24]  713 	reti
                                     714 ;	eliminated unneeded mov psw,# (no regs used in bank)
                                     715 ;	eliminated unneeded push/pop not_psw
                                     716 ;	eliminated unneeded push/pop dpl
@@ -724,11 +724,11 @@
                                     724 ;	-----------------------------------------
                                     725 ;	 function TIME2_Interrupt
                                     726 ;	-----------------------------------------
-      000617                        727 _TIME2_Interrupt:
+      00068C                        727 _TIME2_Interrupt:
                                     728 ;	src/interrupt_handled.c:66: IAP_CONTR |= 0x60;
-      000617 43 C7 60         [24]  729 	orl	_IAP_CONTR,#0x60
+      00068C 43 C7 60         [24]  729 	orl	_IAP_CONTR,#0x60
                                     730 ;	src/interrupt_handled.c:67: }
-      00061A 32               [24]  731 	reti
+      00068F 32               [24]  731 	reti
                                     732 ;	eliminated unneeded mov psw,# (no regs used in bank)
                                     733 ;	eliminated unneeded push/pop not_psw
                                     734 ;	eliminated unneeded push/pop dpl

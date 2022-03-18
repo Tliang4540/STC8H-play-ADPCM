@@ -9,6 +9,7 @@
 ; Public variables in this module
 ;--------------------------------------------------------
 	.globl _main
+	.globl _task2
 	.globl _task1
 	.globl _CPU_Init
 	.globl _MiniSch_Init
@@ -199,6 +200,7 @@
 	.globl _SP
 	.globl _P0
 	.globl _MINI_SCH_RUN
+	.globl _key_sem
 	.globl _timers
 ;--------------------------------------------------------
 ; special function registers
@@ -404,7 +406,13 @@ _P	=	0x00d0
 	.area DSEG    (DATA)
 _timers::
 	.ds 5
+_key_sem::
+	.ds 2
+_task1_play_flag_65536_24:
+	.ds 1
 _task1__lc_65536_24:
+	.ds 1
+_task2__lc_65536_37:
 	.ds 1
 ;--------------------------------------------------------
 ; overlayable items in internal ram 
@@ -534,10 +542,20 @@ __interrupt_vect:
 ;------------------------------------------------------------
 ;Allocation info for local variables in function 'task1'
 ;------------------------------------------------------------
+;play_flag                 Allocated with name '_task1_play_flag_65536_24'
 ;_lc                       Allocated with name '_task1__lc_65536_24'
 ;------------------------------------------------------------
-;	src/main.c:45: _SS
+;	src/main.c:47: static uint8_t play_flag = 0;
+	mov	_task1_play_flag_65536_24,#0x00
+;	src/main.c:48: _SS
 	mov	_task1__lc_65536_24,#0x00
+;------------------------------------------------------------
+;Allocation info for local variables in function 'task2'
+;------------------------------------------------------------
+;_lc                       Allocated with name '_task2__lc_65536_37'
+;------------------------------------------------------------
+;	src/main.c:77: _SS
+	mov	_task2__lc_65536_37,#0x00
 ;	src/main.c:7: bit MINI_SCH_RUN = 1;
 ;	assignBit
 	setb	_MINI_SCH_RUN
@@ -558,7 +576,7 @@ __sdcc_program_startup:
 ;------------------------------------------------------------
 ;Allocation info for local variables in function 'MiniSch_Init'
 ;------------------------------------------------------------
-;	src/main.c:10: void MiniSch_Init(void)
+;	src/main.c:12: void MiniSch_Init(void)
 ;	-----------------------------------------
 ;	 function MiniSch_Init
 ;	-----------------------------------------
@@ -571,187 +589,281 @@ _MiniSch_Init:
 	ar2 = 0x02
 	ar1 = 0x01
 	ar0 = 0x00
-;	src/main.c:12: AUXR = 0x00;	
+;	src/main.c:14: AUXR = 0x00;	
 	mov	_AUXR,#0x00
-;	src/main.c:13: SCON = 0x50;	
+;	src/main.c:15: SCON = 0x50;	
 	mov	_SCON,#0x50
-;	src/main.c:14: TL1 = 0xFC;		//115200
+;	src/main.c:16: TL1 = 0xFC;		//115200
 	mov	_TL1,#0xfc
-;	src/main.c:15: TH1 = 0xFF;
+;	src/main.c:17: TH1 = 0xFF;
 	mov	_TH1,#0xff
-;	src/main.c:16: TR1 = 1;
+;	src/main.c:18: TR1 = 1;
 ;	assignBit
 	setb	_TR1
-;	src/main.c:18: TMOD = 0x00;	//time0 sch, time1 uart
+;	src/main.c:20: TMOD = 0x00;	//time0 sch, time1 uart
 	mov	_TMOD,#0x00
-;	src/main.c:19: IE   = 0x92;  	//ea = 1, et0 = 1
+;	src/main.c:21: IE   = 0x92;  	//ea = 1, et0 = 1
 	mov	_IE,#0x92
-;	src/main.c:20: TL0  = 0xCD;
+;	src/main.c:22: TL0  = 0xCD;
 	mov	_TL0,#0xcd
-;	src/main.c:21: TH0  = 0xF8;
+;	src/main.c:23: TH0  = 0xF8;
 	mov	_TH0,#0xf8
-;	src/main.c:22: TR0  = 1;
+;	src/main.c:24: TR0  = 1;
 ;	assignBit
 	setb	_TR0
-;	src/main.c:23: }
+;	src/main.c:25: }
 	ret
 ;------------------------------------------------------------
 ;Allocation info for local variables in function 'CPU_Init'
 ;------------------------------------------------------------
-;	src/main.c:25: void CPU_Init(void)
+;	src/main.c:27: void CPU_Init(void)
 ;	-----------------------------------------
 ;	 function CPU_Init
 ;	-----------------------------------------
 _CPU_Init:
-;	src/main.c:27: WDT_CONTR = 0x26;	//wdt 2s.
+;	src/main.c:29: WDT_CONTR = 0x26;	//wdt 2s.
 	mov	_WDT_CONTR,#0x26
-;	src/main.c:28: WDT_CONTR = 0x36;	//clear wdt.
+;	src/main.c:30: WDT_CONTR = 0x36;	//clear wdt.
 	mov	_WDT_CONTR,#0x36
-;	src/main.c:30: P1   = 0x00;
+;	src/main.c:32: P1   = 0x00;
 	mov	_P1,#0x00
-;	src/main.c:31: P1M0 = 0xff;
+;	src/main.c:33: P1M0 = 0xff;
 	mov	_P1M0,#0xff
-;	src/main.c:32: P1M1 = 0x00;
+;	src/main.c:34: P1M1 = 0x00;
 	mov	_P1M1,#0x00
-;	src/main.c:34: P3   = 0x03;
-	mov	_P3,#0x03
-;	src/main.c:35: P3M0 = 0xfe;
-	mov	_P3M0,#0xfe
-;	src/main.c:36: P3M1 = 0x00;
+;	src/main.c:36: P3   = 0x0f;
+	mov	_P3,#0x0f
+;	src/main.c:37: P3M0 = 0xf2;
+	mov	_P3M0,#0xf2
+;	src/main.c:38: P3M1 = 0x00;
 	mov	_P3M1,#0x00
-;	src/main.c:38: P5   = 0x00;
+;	src/main.c:40: P5   = 0x00;
 	mov	_P5,#0x00
-;	src/main.c:39: P5M0 = 0x00;
+;	src/main.c:41: P5M0 = 0x00;
 	mov	_P5M0,#0x00
-;	src/main.c:40: P5M1 = 0x00;
+;	src/main.c:42: P5M1 = 0x00;
 	mov	_P5M1,#0x00
-;	src/main.c:41: }
+;	src/main.c:43: }
 	ret
 ;------------------------------------------------------------
 ;Allocation info for local variables in function 'task1'
 ;------------------------------------------------------------
+;play_flag                 Allocated with name '_task1_play_flag_65536_24'
 ;_lc                       Allocated with name '_task1__lc_65536_24'
 ;------------------------------------------------------------
-;	src/main.c:43: uint8_t task1(void)
+;	src/main.c:45: uint8_t task1(void)
 ;	-----------------------------------------
 ;	 function task1
 ;	-----------------------------------------
 _task1:
-;	src/main.c:45: _SS
-	mov	a,#0x35
-	cjne	a,_task1__lc_65536_24,00167$
-	sjmp	00129$
-00167$:
-	mov	a,#0x39
-	cjne	a,_task1__lc_65536_24,00168$
-	sjmp	00108$
-00168$:
-	mov	a,#0x3a
-	cjne	a,_task1__lc_65536_24,00169$
-	sjmp	00112$
-00169$:
-	mov	a,#0x3b
-	cjne	a,_task1__lc_65536_24,00170$
-	sjmp	00116$
-00170$:
-	mov	a,#0x3c
-	cjne	a,_task1__lc_65536_24,00171$
+;	src/main.c:48: _SS
+	mov	a,#0x36
+	cjne	a,_task1__lc_65536_24,00184$
+	sjmp	00104$
+00184$:
+	mov	a,#0x3f
+	cjne	a,_task1__lc_65536_24,00185$
+	sjmp	00125$
+00185$:
+	mov	a,#0x43
+	cjne	a,_task1__lc_65536_24,00186$
 	sjmp	00120$
-00171$:
-	mov	a,#0x3d
-	cjne	a,_task1__lc_65536_24,00172$
-	sjmp	00129$
-00172$:
-;	src/main.c:46: pwm_init();
+00186$:
+;	src/main.c:50: pwm_init();
 	lcall	_pwm_init
-;	src/main.c:47: while(MINI_SCH_RUN)
-00129$:
-	jnb	_MINI_SCH_RUN,00132$
-;	src/main.c:49: WDT_CONTR = 0x36;
-	mov	_WDT_CONTR,#0x36
-;	src/main.c:50: if(dac_send())  //返回为1时表示需要继续填充数据
-	lcall	_dac_send
-	mov	a,dpl
-	jz	00107$
-;	src/main.c:52: WaitX(10);
-	mov	_task1__lc_65536_24,#0x35
-	mov	dpl,#0x0a
-;	src/main.c:56: WaitX(200);
+;	src/main.c:51: while(MINI_SCH_RUN)
+00130$:
+	jnb	_MINI_SCH_RUN,00133$
+;	src/main.c:53: Sem_Take(key_sem, 0xff);
+	mov	_key_sem,#0xff
+	mov	_task1__lc_65536_24,#0x36
+	mov	dpl,#0x00
 	ret
+00104$:
+	mov	a,_key_sem
+	jz	00112$
+	mov	a,(_key_sem + 0x0001)
+	jnz	00112$
+	mov	r7,_key_sem
+	cjne	r7,#0xff,00190$
+	sjmp	00107$
+00190$:
+	mov	a,r7
+	dec	a
+	mov	_key_sem,a
 00107$:
-	mov	_task1__lc_65536_24,#0x39
-	mov	dpl,#0xc8
-	ret
-00108$:
-;	src/main.c:57: WaitX(200);
-	mov	_task1__lc_65536_24,#0x3a
-	mov	dpl,#0xc8
+	mov	dpl,#0x01
 	ret
 00112$:
-;	src/main.c:58: WaitX(200);
-	mov	_task1__lc_65536_24,#0x3b
-	mov	dpl,#0xc8
+;	src/main.c:54: if(key_sem.sem_value)
+	mov	a,(_key_sem + 0x0001)
+	mov	r7,a
+	jz	00130$
+;	src/main.c:56: key_sem.sem_value--;
+	mov	a,r7
+	dec	a
+	mov	(_key_sem + 0x0001),a
+;	src/main.c:57: play_flag = 1;
+	mov	_task1_play_flag_65536_24,#0x01
+;	src/main.c:58: while(play_flag)
+00125$:
+	mov	a,_task1_play_flag_65536_24
+	jz	00130$
+;	src/main.c:60: if(dac_send())  //返回为1时表示需要继续填充数据
+	lcall	_dac_send
+	mov	a,dpl
+	jz	00119$
+;	src/main.c:62: WaitX(10);
+	mov	_task1__lc_65536_24,#0x3f
+	mov	dpl,#0x0a
+;	src/main.c:66: WaitX(200);
 	ret
-00116$:
-;	src/main.c:59: WaitX(200);
-	mov	_task1__lc_65536_24,#0x3c
+00119$:
+	mov	_task1__lc_65536_24,#0x43
 	mov	dpl,#0xc8
 	ret
 00120$:
-;	src/main.c:60: WaitX(200);
-	mov	_task1__lc_65536_24,#0x3d
-	mov	dpl,#0xc8
-;	src/main.c:63: _EE
-	ret
-00132$:
+;	src/main.c:67: play_flag = 0;
+	mov	_task1_play_flag_65536_24,#0x00
+;	src/main.c:72: _EE
+	sjmp	00125$
+00133$:
 	mov	_task1__lc_65536_24,#0x00
 	mov	dpl,#0xff
-;	src/main.c:64: }
+;	src/main.c:73: }
+	ret
+;------------------------------------------------------------
+;Allocation info for local variables in function 'task2'
+;------------------------------------------------------------
+;_lc                       Allocated with name '_task2__lc_65536_37'
+;------------------------------------------------------------
+;	src/main.c:75: uint8_t task2(void)
+;	-----------------------------------------
+;	 function task2
+;	-----------------------------------------
+_task2:
+;	src/main.c:77: _SS
+	mov	a,#0x52
+	cjne	a,_task2__lc_65536_37,00170$
+	sjmp	00104$
+00170$:
+	mov	a,#0x55
+	cjne	a,_task2__lc_65536_37,00171$
+	sjmp	00108$
+00171$:
+	mov	a,#0x5c
+	cjne	a,_task2__lc_65536_37,00172$
+	sjmp	00114$
+00172$:
+	mov	a,#0x5d
+	cjne	a,_task2__lc_65536_37,00173$
+	sjmp	00121$
+00173$:
+;	src/main.c:78: Sem_Init(key_sem, 0);
+	mov	(_key_sem + 0x0001),#0x00
+;	src/main.c:79: while(MINI_SCH_RUN)
+00128$:
+	jnb	_MINI_SCH_RUN,00131$
+;	src/main.c:81: WaitX(10);
+	mov	_task2__lc_65536_37,#0x52
+	mov	dpl,#0x0a
+	ret
+00104$:
+;	src/main.c:82: if(P33 == 0)
+	jb	_P33,00128$
+;	src/main.c:84: WaitX(20);
+	mov	_task2__lc_65536_37,#0x55
+	mov	dpl,#0x14
+	ret
+00108$:
+;	src/main.c:85: if(P33 == 0)
+	jb	_P33,00128$
+;	src/main.c:87: Sem_Release(key_sem);
+	mov	a,(_key_sem + 0x0001)
+	mov	r7,a
+	inc	a
+	mov	(_key_sem + 0x0001),a
+;	src/main.c:88: while(P33 == 0)
+00121$:
+	jb	_P33,00128$
+;	src/main.c:90: while(P33 == 0)
+00114$:
+	jb	_P33,00118$
+;	src/main.c:91: WaitX(20);
+	mov	_task2__lc_65536_37,#0x5c
+	mov	dpl,#0x14
+;	src/main.c:92: WaitX(20);
+	ret
+00118$:
+	mov	_task2__lc_65536_37,#0x5d
+	mov	dpl,#0x14
+;	src/main.c:97: _EE
+	ret
+00131$:
+	mov	_task2__lc_65536_37,#0x00
+	mov	dpl,#0xff
+;	src/main.c:98: }
 	ret
 ;------------------------------------------------------------
 ;Allocation info for local variables in function 'main'
 ;------------------------------------------------------------
 ;i                         Allocated to registers r7 
 ;d                         Allocated to registers r7 
+;d                         Allocated to registers r7 
 ;------------------------------------------------------------
-;	src/main.c:66: void main(void)
+;	src/main.c:100: void main(void)
 ;	-----------------------------------------
 ;	 function main
 ;	-----------------------------------------
 _main:
-;	src/main.c:68: InitTasks();
+;	src/main.c:102: InitTasks();
 	mov	r7,#0x05
-00116$:
+00124$:
 	mov	ar6,r7
 	mov	a,r6
 	dec	a
 	add	a,#_timers
 	mov	r0,a
 	mov	@r0,#0x00
-	djnz	r7,00116$
-;	src/main.c:69: CPU_Init();
+	djnz	r7,00124$
+;	src/main.c:103: CPU_Init();
 	lcall	_CPU_Init
-;	src/main.c:70: MiniSch_Init();
+;	src/main.c:104: MiniSch_Init();
 	lcall	_MiniSch_Init
-;	src/main.c:71: printf("start up!\n");
+;	src/main.c:105: printf("start up!\n");
 	mov	dptr,#___str_0
 	mov	b,#0x80
 	lcall	_printf
-;	src/main.c:72: while(1)
-00114$:
-;	src/main.c:74: RunTaskA(task1, 0);
+;	src/main.c:106: while(1)
+00122$:
+;	src/main.c:108: WDT_CONTR = 0x36;
+	mov	_WDT_CONTR,#0x36
+;	src/main.c:109: RunTaskA(task1, 0);
 	mov	a,_timers
-	jnz	00114$
+	jnz	00112$
 	lcall	_task1
 	mov	r7,dpl
 00105$:
 	mov	a,r7
-	cjne	a,_timers,00149$
-	sjmp	00114$
-00149$:
+	cjne	a,_timers,00169$
+	sjmp	00112$
+00169$:
 	mov	_timers,r7
-;	src/main.c:76: }
 	sjmp	00105$
+00112$:
+;	src/main.c:110: RunTaskA(task2, 1);
+	mov	a,(_timers + 0x0001)
+	jnz	00122$
+	lcall	_task2
+	mov	r7,dpl
+00113$:
+	mov	a,r7
+	cjne	a,(_timers + 0x0001),00171$
+	sjmp	00122$
+00171$:
+	mov	(_timers + 0x0001),r7
+;	src/main.c:112: }
+	sjmp	00113$
 	.area CSEG    (CODE)
 	.area CONST   (CODE)
 	.area CONST   (CODE)

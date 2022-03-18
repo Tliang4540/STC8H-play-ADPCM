@@ -7,6 +7,8 @@
 bit MINI_SCH_RUN = 1;
 volatile uint8_t timers[MAXTASKS];
 
+sem_type key_sem;
+
 void MiniSch_Init(void)
 {
   AUXR = 0x00;	
@@ -31,8 +33,8 @@ void CPU_Init(void)
   P1M0 = 0xff;
   P1M1 = 0x00;
 
-  P3   = 0x03;
-  P3M0 = 0xfe;
+  P3   = 0x0f;
+  P3M0 = 0xf2;
   P3M1 = 0x00;
 
   P5   = 0x00;
@@ -42,22 +44,54 @@ void CPU_Init(void)
 
 uint8_t task1(void)
 {
+  static uint8_t play_flag = 0;
   _SS
+
   pwm_init();
   while(MINI_SCH_RUN)
   {
-    WDT_CONTR = 0x36;
-    if(dac_send())  //返回为1时表示需要继续填充数据
+    Sem_Take(key_sem, 0xff);
+    if(key_sem.sem_value)
     {
-      WaitX(10);
+      key_sem.sem_value--;
+      play_flag = 1;
+      while(play_flag)
+      {
+        if(dac_send())  //返回为1时表示需要继续填充数据
+        {
+          WaitX(10);
+        }
+        else            //否则表示数据已经全部填入缓存
+        {
+          WaitX(200);
+          play_flag = 0;
+        }
+      }
     }
-    else            //否则表示数据已经全部填入缓存
+  }
+  _EE
+}
+
+uint8_t task2(void)
+{
+  _SS
+  Sem_Init(key_sem, 0);
+  while(MINI_SCH_RUN)
+  {
+    WaitX(10);
+    if(P33 == 0)
     {
-      WaitX(200);
-      WaitX(200);
-      WaitX(200);
-      WaitX(200);
-      WaitX(200);
+      WaitX(20);
+      if(P33 == 0)
+      {
+        Sem_Release(key_sem);
+        while(P33 == 0)
+        {
+          while(P33 == 0)
+            WaitX(20);
+          WaitX(20);
+        }
+      }
     }
   }
   _EE
@@ -71,6 +105,8 @@ void main(void)
   printf("start up!\n");
   while(1)
   {
+    WDT_CONTR = 0x36;
     RunTaskA(task1, 0);
+    RunTaskA(task2, 1);
   }
 }

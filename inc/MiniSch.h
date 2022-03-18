@@ -26,11 +26,11 @@ extern volatile uint8_t timers[MAXTASKS];
 
 typedef struct
 {
-  uint8_t sem_tick;
-  uint8_t sem_value;
-}SEM;
-#define WaitSem(sem,tick) do{sem.sem_tick = tick;sem.sem_value = 0; WaitX(0); if(sem.sem_tick){sem.sem_tick--; return 1; } }while(0);
-#define SendSem(sem,val)	do{sem.sem_value = val;sem.sem_tick = 0;}while(0);
-#define ReadSem(sem)	(sem.sem_value)
+	uint8_t sem_tick;
+	uint8_t sem_value;
+}sem_type;
+#define Sem_Init(sem, value)    (sem.sem_value = value)
+#define Sem_Take(sem,tick)      do{sem.sem_tick = tick; WaitX(0); if(sem.sem_tick && (0 == sem.sem_value)){ if(sem.sem_tick != 0xff)sem.sem_tick--; return 1; } }while(0);
+#define Sem_Release(sem)	      (sem.sem_value++)
 
 #endif

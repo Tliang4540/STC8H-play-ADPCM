@@ -51,12 +51,12 @@ C:   00000018  s_REG_BANK_3
 C:   00000020  s_BSEG_BYTES                    
 C:   00000020  s__CODE                         
 C:   00000022  l_GSINIT3                       
-C:   00000025  l_GSINIT                        
-C:   00000027  s_OSEG                          
 C:   0000002A  l_GSINIT4                       
-C:   0000002B  s_SSEG                          
+C:   0000002B  l_GSINIT                        
+C:   0000002B  s_OSEG                          
+C:   0000002F  s_SSEG                          
 C:   00000080  l_DSEG                          
-C:   000000D5  l_SSEG                          
+C:   000000D1  l_SSEG                          
 ASxxxx Linker V03.00 + NoICE + sdld,  page 2.
 Hexadecimal  [32-Bits]
 
@@ -75,14 +75,14 @@ C:   00000100  l_IRAM
 C:   00000110  s_GSINIT4                       
 C:   0000013A  s_GSINIT                        
 C:   0000013A  s_GSINIT5                       
-C:   0000015F  s_GSFINAL                       
-C:   00000162  s_CSEG                          
+C:   00000165  s_GSFINAL                       
+C:   00000168  s_CSEG                          
 C:   00000200  l_XSEG                          
 C:   00000201  s_XISEG                         
-C:   000006AD  l_CSEG                          
-C:   0000080F  s_CONST                         
+C:   0000071C  l_CSEG                          
+C:   00000884  s_CONST                         
 C:   00000D77  l_CONST                         
-C:   00001586  s_XINIT                         
+C:   000015FB  s_XINIT                         
 
 ASxxxx Linker V03.00 + NoICE + sdld,  page 3.
 Hexadecimal  [32-Bits]
@@ -352,31 +352,32 @@ DSEG                                00000000    00000080 =         128. bytes (R
      0000001E  _UartSend_Length                   uart
      0000001F  _reset                             uart
      00000021  _timers                            main
+     00000026  _key_sem                           main
 
 ASxxxx Linker V03.00 + NoICE + sdld,  page 11.
 Hexadecimal  [32-Bits]
 
 Area                                    Addr        Size        Decimal Bytes (Attributes)
 --------------------------------        ----        ----        ------- ----- ------------
-OSEG                                00000027    00000004 =           4. bytes (REL,OVR)
+OSEG                                0000002B    00000004 =           4. bytes (REL,OVR)
 
       Value  Global                              Global Defined In Module
       -----  --------------------------------   ------------------------
-     00000027  __divslong_PARM_2                  _divulong
-     00000027  __divulong_PARM_2                  _divulong
-     00000027  __modsint_PARM_2                   _moduint
-     00000027  __moduint_PARM_2                   _moduint
+     0000002B  __divslong_PARM_2                  _divulong
+     0000002B  __divulong_PARM_2                  _divulong
+     0000002B  __modsint_PARM_2                   _moduint
+     0000002B  __moduint_PARM_2                   _moduint
 
 ASxxxx Linker V03.00 + NoICE + sdld,  page 12.
 Hexadecimal  [32-Bits]
 
 Area                                    Addr        Size        Decimal Bytes (Attributes)
 --------------------------------        ----        ----        ------- ----- ------------
-SSEG                                0000002B    000000D5 =         213. bytes (REL,OVR)
+SSEG                                0000002F    000000D1 =         209. bytes (REL,OVR)
 
       Value  Global                              Global Defined In Module
       -----  --------------------------------   ------------------------
-     0000002B  __start__stack                     main
+     0000002F  __start__stack                     main
 
 ASxxxx Linker V03.00 + NoICE + sdld,  page 13.
 Hexadecimal  [32-Bits]
@@ -449,7 +450,7 @@ Hexadecimal  [32-Bits]
 
 Area                                    Addr        Size        Decimal Bytes (Attributes)
 --------------------------------        ----        ----        ------- ----- ------------
-GSINIT                              0000013A    00000025 =          37. bytes (REL,CON,CODE)
+GSINIT                              0000013A    0000002B =          43. bytes (REL,CON,CODE)
 
       Value  Global                              Global Defined In Module
       -----  --------------------------------   ------------------------
@@ -458,7 +459,7 @@ Hexadecimal  [32-Bits]
 
 Area                                    Addr        Size        Decimal Bytes (Attributes)
 --------------------------------        ----        ----        ------- ----- ------------
-GSFINAL                             0000015F    00000003 =           3. bytes (REL,CON,CODE)
+GSFINAL                             00000165    00000003 =           3. bytes (REL,CON,CODE)
 
       Value  Global                              Global Defined In Module
       -----  --------------------------------   ------------------------
@@ -467,51 +468,52 @@ Hexadecimal  [32-Bits]
 
 Area                                    Addr        Size        Decimal Bytes (Attributes)
 --------------------------------        ----        ----        ------- ----- ------------
-CSEG                                00000162    000006AD =        1709. bytes (REL,CON,CODE)
+CSEG                                00000168    0000071C =        1820. bytes (REL,CON,CODE)
 
       Value  Global                              Global Defined In Module
       -----  --------------------------------   ------------------------
-C:   00000162  _ADPCM_Decode                      pwm_dac
-C:   000002C1  _pwm_init                          pwm_dac
-C:   000002FC  _PWM2_Interrupt                    pwm_dac
-C:   0000034E  _dac_send                          pwm_dac
-C:   000004E7  _MiniSch_Init                      main
-C:   00000504  _CPU_Init                          main
-C:   00000526  _task1                             main
-C:   00000591  _main                              main
-C:   000005C0  _INT0_Interrupt                    interrupt_handled
-C:   000005C4  _TIME0_Interrupt                   interrupt_handled
-C:   000005F3  _INT1_Interrupt                    interrupt_handled
-C:   000005F7  _TIME1_Interrupt                   interrupt_handled
-C:   000005FB  _ADC_Interrupt                     interrupt_handled
-C:   000005FF  _LVD_Interrupt                     interrupt_handled
-C:   00000603  _PCA_Interrupt                     interrupt_handled
-C:   00000607  _UART2_Interrupt                   interrupt_handled
-C:   0000060B  _SPI_Interrupt                     interrupt_handled
-C:   0000060F  _INT2_Interrupt                    interrupt_handled
-C:   00000613  _INT3_Interrupt                    interrupt_handled
-C:   00000617  _TIME2_Interrupt                   interrupt_handled
-C:   0000061B  _UART1_Interrupt                   uart
-C:   0000066F  _printf                            uart
-C:   000006BE  _printf_byte                       uart
-C:   000006EB  __divulong                         _divulong
-C:   00000750  __moduint                          _moduint
-C:   0000079D  __divslong                         _divslong
-C:   000007EF  __gptrget                          _gptrget
-C:   0000080B  __sdcc_external_startup            _startup
+C:   00000168  _ADPCM_Decode                      pwm_dac
+C:   000002C7  _pwm_init                          pwm_dac
+C:   00000302  _PWM2_Interrupt                    pwm_dac
+C:   00000354  _dac_send                          pwm_dac
+C:   000004ED  _MiniSch_Init                      main
+C:   0000050A  _CPU_Init                          main
+C:   0000052C  _task1                             main
+C:   00000599  _task2                             main
+C:   000005F0  _main                              main
+C:   00000635  _INT0_Interrupt                    interrupt_handled
+C:   00000639  _TIME0_Interrupt                   interrupt_handled
+C:   00000668  _INT1_Interrupt                    interrupt_handled
+C:   0000066C  _TIME1_Interrupt                   interrupt_handled
+C:   00000670  _ADC_Interrupt                     interrupt_handled
+C:   00000674  _LVD_Interrupt                     interrupt_handled
+C:   00000678  _PCA_Interrupt                     interrupt_handled
+C:   0000067C  _UART2_Interrupt                   interrupt_handled
+C:   00000680  _SPI_Interrupt                     interrupt_handled
+C:   00000684  _INT2_Interrupt                    interrupt_handled
+C:   00000688  _INT3_Interrupt                    interrupt_handled
+C:   0000068C  _TIME2_Interrupt                   interrupt_handled
+C:   00000690  _UART1_Interrupt                   uart
+C:   000006E4  _printf                            uart
+C:   00000733  _printf_byte                       uart
+C:   00000760  __divulong                         _divulong
+C:   000007C5  __moduint                          _moduint
+C:   00000812  __divslong                         _divslong
+C:   00000864  __gptrget                          _gptrget
+C:   00000880  __sdcc_external_startup            _startup
 
 ASxxxx Linker V03.00 + NoICE + sdld,  page 22.
 Hexadecimal  [32-Bits]
 
 Area                                    Addr        Size        Decimal Bytes (Attributes)
 --------------------------------        ----        ----        ------- ----- ------------
-CONST                               0000080F    00000D77 =        3447. bytes (REL,CON,CODE)
+CONST                               00000884    00000D77 =        3447. bytes (REL,CON,CODE)
 
       Value  Global                              Global Defined In Module
       -----  --------------------------------   ------------------------
-C:   0000080F  _StepSizeTable                     pwm_dac
-C:   000008C1  _IndexTable                        pwm_dac
-C:   000008D1  _wav_buf                           pwm_dac
+C:   00000884  _StepSizeTable                     pwm_dac
+C:   00000936  _IndexTable                        pwm_dac
+C:   00000946  _wav_buf                           pwm_dac
 ASxxxx Linker V03.00 + NoICE + sdld,  page 23.
 
 Files Linked                              [ module(s) ]
